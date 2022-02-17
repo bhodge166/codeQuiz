@@ -1,3 +1,4 @@
+// sets array of questions and answers
 var quizQuestions = [
   {
     question: "Commonly used data types DO NOT include:",
@@ -52,7 +53,7 @@ var quizQuestions = [
     correct: "d",
   },
 ];
-
+// sets variables for html items
 var startButton = document.querySelector(".startButton");
 var quiz = document.getElementById("quiz");
 var options = document.querySelector(".options");
@@ -60,12 +61,16 @@ var timer = document.querySelector(".timer");
 var paragraph = document.querySelector("p");
 var evaluateAnswers = document.querySelector(".evaluateAnswer");
 var endgame = document.querySelector(".endgameUl");
-var clear = document.querySelector(".clear")
+var clear = document.querySelector(".clear");
+// sets start point
 var secondsLeft = 70;
 var score = 0;
 var questionNumber = 0;
 var savedScores = JSON.parse(localStorage.getItem("score")) || [];
+var currentScore = savedScores.length;
+var combinedQuestions = [];
 
+// creates question array, starts timer, shows first question, hides initial paragraph with rules and start button
 function startGame() {
   populateArray();
   showQuestion(questionNumber);
@@ -74,8 +79,7 @@ function startGame() {
   paragraph.style.display = "none";
   startButton.style.display = "none";
 }
-var combinedQuestions = [];
-
+// creates array of questions and pushes to new array in new divs
 function populateArray() {
   for (var i = 0; i < quizQuestions.length; i++) {
     var answers = [];
@@ -102,12 +106,13 @@ function populateArray() {
     );
   }
 }
-
+// puts 1 question into quiz div
 function showQuestion(questionNumber) {
   quiz.innerHTML = combinedQuestions[questionNumber];
 }
-
+// prompts for initials, saves to local storage, resets score and timer, calls postscore
 function showEndgame() {
+  // savedScores = []
   var initials = window.prompt(
     "Your Score is " + score + ". Please enter your initials."
   );
@@ -121,9 +126,9 @@ function showEndgame() {
   secondsLeft = 70;
   startButton.textContent = "Play again?";
   startButton.style.display = "block";
-  showScores();
+  postScores();
 }
-
+// starts timer, ends game if timer runs out
 function startTimer() {
   var timerInterval = setInterval(function () {
     secondsLeft--;
@@ -131,12 +136,12 @@ function startTimer() {
 
     if (secondsLeft <= 0) {
       clearInterval(timerInterval);
-      timer.textContent = ""
+      timer.textContent = "";
       showEndgame();
     }
   }, 1000);
 }
-
+// checks if users choice is the correct answer, deducts timer if wrong answer, calls next question and ends game if out of questions
 function evaluate(event) {
   if (event.target.className !== "questionbtn") {
     return;
@@ -155,27 +160,38 @@ function evaluate(event) {
     score = secondsLeft;
     secondsLeft = 0;
     evaluateAnswers.textContent = "";
+    timer.textContent = "";
   } else {
     showQuestion(questionNumber);
   }
 }
-
-function showScores() {
-  for (let i = 0; i < savedScores.length; i++) {
+// posts scores from local storage on page load
+function init() {
+  for (var i = 0; i < savedScores.length; i++) {
     var element = savedScores[i];
     var createLi = document.createElement("li");
-    createLi.textContent = element.initials + " -- " + element.score;
+    createLi.textContent = element.initials + " - " + element.score;
     endgame.appendChild(createLi);
   }
 }
-
-function clearScores () {
-    localStorage.clear ()
-    savedScores = []
-    endgame.innerHTML = ""
+// posts score for current run
+function postScores() {
+  var element = savedScores[currentScore];
+  var createLi = document.createElement("li");
+  createLi.textContent = element.initials + " - " + element.score;
+  endgame.appendChild(createLi);
+  currentScore++;
 }
-
+// clears local storage, posted scores, and resets array storing scores
+function clearScores() {
+  localStorage.clear();
+  savedScores = [];
+  endgame.innerHTML = "";
+  currentScore = savedScores.length;
+}
+// event listeners for button clicks
 startButton.addEventListener("click", startGame);
 quiz.addEventListener("click", evaluate);
-clear.addEventListener("click", clearScores)
-showScores();
+clear.addEventListener("click", clearScores);
+// calls function on page load
+init();

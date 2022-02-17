@@ -1,0 +1,55 @@
+*{
+    font-size: 16px;
+}
+
+h1 {
+    color: blue;
+    font-size: 3rem;
+    text-align: center;
+}
+
+p{
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.startButton {
+    display: block;
+    margin: 0 auto;
+}
+
+.questionbtn {
+    display: block;
+    margin: 5px;
+}
+
+.question {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.evaluateAnswer {
+    font-size: 1.5rem;
+}
+
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: darkcyan;
+    margin-bottom: -5px;
+}
+
+ul {
+    list-style: none;
+    text-align: center;
+}
+
+li {
+    font-size: 1.5rem;
+    margin-left: -30px;
+}
+
+.clear {
+    display: block;
+    margin: 0 auto;
+}
